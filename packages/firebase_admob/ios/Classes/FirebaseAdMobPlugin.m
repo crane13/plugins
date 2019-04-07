@@ -76,7 +76,7 @@
   }
 
   NSString *adSizeTypeArg = (NSString *)call.arguments[@"adSizeType"];
-  FLTLogWarning(@"Size Type: %@", adSizeTypeArg);
+  //FLTLogWarning(@"Size Type: %@", adSizeTypeArg);
   if (adSizeTypeArg == nil || (![adSizeTypeArg isEqualToString:@"AdSizeType.SmartBanner"] &&
                                ![adSizeTypeArg isEqualToString:@"AdSizeType.WidthAndHeight"])) {
     NSString *message = [NSString

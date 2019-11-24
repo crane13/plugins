@@ -17,6 +17,8 @@ static NSString *const PLATFORM_CHANNEL = @"plugins.flutter.io/share";
     if ([@"share" isEqualToString:call.method]) {
       NSDictionary *arguments = [call arguments];
       NSString *shareText = arguments[@"text"];
+      NSString *url = arguments[@"url"];
+      NSString *icon = arguments[@"icon"];
 
       if (shareText.length == 0) {
         result([FlutterError errorWithCode:@"error"
@@ -36,9 +38,12 @@ static NSString *const PLATFORM_CHANNEL = @"plugins.flutter.io/share";
                                 [originWidth doubleValue], [originHeight doubleValue]);
       }
 
-      [self share:shareText
-          withController:[UIApplication sharedApplication].keyWindow.rootViewController
-                atSource:originRect];
+    //  [self share11:shareText
+      //    withController:[UIApplication sharedApplication].keyWindow.rootViewController
+              //  atSource:originRect];
+                [self share:shareText withIcon: icon withUrl:url
+                         withController:[UIApplication sharedApplication].keyWindow.rootViewController
+                             atSource:originRect];
       result(nil);
     } else {
       result(FlutterMethodNotImplemented);
@@ -46,11 +51,36 @@ static NSString *const PLATFORM_CHANNEL = @"plugins.flutter.io/share";
   }];
 }
 
-+ (void)share:(id)sharedItems
++ (void)share:(NSString *)sharedItems withIcon:(NSString *) icon withUrl:(NSString *) url
     withController:(UIViewController *)controller
           atSource:(CGRect)origin {
+
+  UIImage *imageToShare = [UIImage imageNamed:@"ic_launcher.png"];
+
+NSURL *urlToShare = [NSURL URLWithString:url];
+//  NSURL *urlToShare = [NSURL URLWithString:@"https://lkme.cc/SfD/ouXFp8RGN"];
+ // NSURL *urlToShare = [NSURL URLWithString:@"https://lkme.cc/dcD/8afWE3HaM"];
+
   UIActivityViewController *activityViewController =
-      [[UIActivityViewController alloc] initWithActivityItems:@[ sharedItems ]
+      [[UIActivityViewController alloc] initWithActivityItems:@[ sharedItems, imageToShare, urlToShare ]
+                                        applicationActivities:nil];
+  activityViewController.popoverPresentationController.sourceView = controller.view;
+  if (!CGRectIsEmpty(origin)) {
+    activityViewController.popoverPresentationController.sourceRect = origin;
+  }
+  [controller presentViewController:activityViewController animated:YES completion:nil];
+}
++ (void)share11:(id)sharedItems
+    withController:(UIViewController *)controller
+          atSource:(CGRect)origin {
+
+  UIImage *imageToShare = [UIImage imageNamed:@""]; //download_qrcode
+
+  NSURL *urlToShare = [NSURL URLWithString:@"https://lkme.cc/SfD/ouXFp8RGN"];
+ // NSURL *urlToShare = [NSURL URLWithString:@"https://lkme.cc/dcD/8afWE3HaM"];
+
+  UIActivityViewController *activityViewController =
+      [[UIActivityViewController alloc] initWithActivityItems:@[ sharedItems, imageToShare, urlToShare ]
                                         applicationActivities:nil];
   activityViewController.popoverPresentationController.sourceView = controller.view;
   if (!CGRectIsEmpty(origin)) {
